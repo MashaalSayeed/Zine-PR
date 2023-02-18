@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
             [username]
         );
 
-        if (!dbresult.rows) return res.status(401).json({ message: "Username not found" })
+        if (!dbresult.rows.length) return res.status(401).json({ message: "Username not found" })
 
         const user = dbresult.rows[0];
         const match = await bcrypt.compare(password, user.password);
@@ -26,7 +26,7 @@ router.post('/login', async (req, res) => {
             email: user.email
         }
 
-        jwt.sign(authUser, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "2h"})
+        const token = jwt.sign(authUser, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "2h"})
         const expiryTime = new Date(2 * 60 * 60 * 1000 + Date.now());
         res.cookie("t", token, {
             expires: expiryTime,
@@ -45,12 +45,13 @@ router.post('/signup', async (req, res) => {
 
         // Check if email already exists
         const existingUser = await pool.query(
-            "SELECT userid FROM users WHERE email=$1",
-            [email]
+            "SELECT email, username FROM users WHERE email=$1 OR username=$2",
+            [email, username]
         );
-        if (existingUser) {
-            return res.status(409).json({
-                message: "Email already in use",
+        if (existingUser.rows.length) {
+            console.log(existingUser.rows[0])
+            return res.status(401).json({ 
+                message: existingUser.rows[0].email == email ? "Email already in use" : "Username already in use"
             });
         }
 

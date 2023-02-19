@@ -6,19 +6,19 @@ const pool = require('../db/db');
 
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        console.log(username, password);
+        const { email, password } = req.body;
+        console.log(email, password);
 
         const dbresult = await pool.query(
-            "SELECT * FROM users WHERE username=$1",
-            [username]
+            "SELECT * FROM users WHERE email=$1",
+            [email]
         );
 
-        if (!dbresult.rows.length) return res.status(401).json({ message: "Username not found" })
+        if (!dbresult.rows.length) return res.status(401).json({ message: "Incorrect Email ID or password" })
 
         const user = dbresult.rows[0];
         const match = await bcrypt.compare(password, user.password);
-        if (!match) return res.status(401).json({ message: "Incorrect password" });
+        if (!match) return res.status(401).json({ message: "Incorrect Email ID or password" });
 
         const authUser = {
             userid: user.userid,
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
         });
     
-        return res.json(user);
+        return res.json(authUser);
     } catch (error) {
         throw error
     }
@@ -64,7 +64,7 @@ router.post('/signup', async (req, res) => {
             [username, hashed_password, email]
         );
 
-        res.json(dbresult.rows[0]);
+        res.json({ message: "Sign up successful!" });
     } catch (error) {
         throw error;
     }

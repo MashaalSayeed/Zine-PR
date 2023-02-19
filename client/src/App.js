@@ -1,21 +1,23 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { useSelector } from 'react-redux'
+
 
 import Navbar from "./components/Navbar"
-import Dashboard from "./routes/Dashboard";
+import Profile from "./routes/Profile";
 import Home from './routes/Home';
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
 
 const PrivateRoute = () => {
-    const isAuth = false;
-    return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>
+    const { isAuthenticated } = useSelector(state => state.auth);
+    return <>{isAuthenticated ? <Outlet /> : <Navigate to="/login" />}</>
 }
 
 const GuestRoute = () => {
-    const isAuth = false;
-    return <>{!isAuth ? <Outlet /> : <Navigate to="/profile" />}</>
+    const { isAuthenticated } = useSelector(state => state.auth);
+    return <>{!isAuthenticated ? <Outlet /> : <Navigate to="/profile" />}</>
 }
 
 const App = (props) => {
@@ -41,7 +43,7 @@ const App = (props) => {
                         <Route path="/signup" element={<Signup />} />
                     </Route>
                     <Route element={<PrivateRoute />}>
-                        <Route path="/profile" element={<Dashboard />} />
+                        <Route path="/profile" element={<Profile />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

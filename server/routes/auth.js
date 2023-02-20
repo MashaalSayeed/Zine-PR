@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../db/db');
+const authorize = require('../middlewares/auth')
 
 router.post('/login', async (req, res) => {
     try {
@@ -33,7 +34,7 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
         });
     
-        return res.json(authUser);
+        return res.json({ user: authUser });
     } catch (error) {
         throw error
     }
@@ -65,6 +66,15 @@ router.post('/signup', async (req, res) => {
         );
 
         res.json({ message: "Sign up successful!" });
+    } catch (error) {
+        throw error;
+    }
+})
+
+router.post('/logout', [authorize], async (req, res) => {
+    try {
+        res.clearCookie('t')
+        return res.json({ message: "Logged Out" })
     } catch (error) {
         throw error;
     }

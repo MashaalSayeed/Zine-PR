@@ -9,6 +9,7 @@ import App from "./App";
 import { store, persistor } from "./state/store";
 
 axios.defaults.baseURL = "http://localhost:5555"
+axios.defaults.withCredentials = true;
 
 const NODE_MOUNT = document.getElementById("root");
 

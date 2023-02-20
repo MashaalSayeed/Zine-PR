@@ -49,7 +49,7 @@ const Login = () => {
                     marginTop: 8,
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center'
+                    alignItems: 'center',
                 }}
             >
                 <Typography component="h1" variant="h4">

@@ -3,12 +3,13 @@ import React from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useSelector } from 'react-redux'
 
-
 import Navbar from "./components/Navbar"
 import Profile from "./routes/Profile";
 import Home from './routes/Home';
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
+import Search from './routes/Search';
+import Product from "./routes/Product";
 
 const PrivateRoute = () => {
     const { isAuthenticated } = useSelector(state => state.auth);
@@ -37,11 +38,16 @@ const App = (props) => {
             <BrowserRouter>
                 <Navbar />
                 <Routes>
+
                     <Route exact path="" element={<Home />} />
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/product" element={<Product />} />
+
                     <Route element={<GuestRoute />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                     </Route>
+    
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<Profile />} />
                     </Route>

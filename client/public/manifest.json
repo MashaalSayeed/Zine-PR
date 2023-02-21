@@ -1,0 +1,8 @@
+{
+    "short_name": "Zine PR",
+    "name": "Zine Product Review",
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+}

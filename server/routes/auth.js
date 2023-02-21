@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
         });
     
-        return res.json({ user: authUser });
+        return res.json({ expires: expiryTime, user: authUser });
     } catch (error) {
         throw error
     }

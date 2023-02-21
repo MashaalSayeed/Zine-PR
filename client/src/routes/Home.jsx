@@ -5,6 +5,10 @@ import shopimg from "../assets/images/productshop.jpg"
 
 const Home = () => {
     const categories = ['Electronics', 'Food', 'Health', 'Books', 'Toys', 'Games'];
+    const search = (e) => {
+        e.preventDefault();
+    }
+
     return (
         <Container component="main" maxWidth="false" disableGutters="true" sx={{position: "relative"}}>
             <Box
@@ -21,28 +25,27 @@ const Home = () => {
             />
             <div className="overlay">
                 <div>
-                    <Typography color="white" component="h1" sx={{ typography: { md: 'h1', sm: 'h2', xs: 'h5' } }}>
+                    <Typography color="white" component="h1" sx={{ typography: { md: 'h1', sm: 'h2', xs: 'h4' } }}>
                         <b>Product Review</b>
                     </Typography>
 
                     <Box component="form" autoComplete="off" noValidate
                         sx={{
-                            width: '100%',
-                            display: 'grid',
-                            alignItems: 'center',
-                            margin: 'auto'
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center'
                         }}
                     >
                         <TextField
-                            margin="normal"
                             label="Search for a product"
                             type="search"
                             variant="filled"
+                            size="small"
                             fullWidth
-                            sx={{ background: "white" }}
+                            sx={{ background: "white", marginRight: "2px" }}
                         />
 
-                        <Button type="submit" variant="contained">Search</Button>
+                        <Button type="submit" variant="contained" size="large" onClick={search}>Search</Button>
                     </Box>
                 </div>
             </div>

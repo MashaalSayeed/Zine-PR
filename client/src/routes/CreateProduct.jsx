@@ -7,8 +7,8 @@ const CreateProduct = () => {
     const [localState, setLocalState] = useState({
         name: "",
         description: "",
-        price: null,
-        image: null,
+        price: undefined,
+        image: undefined,
     });
 
     const onChange = (e) => {

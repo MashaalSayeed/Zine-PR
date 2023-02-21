@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Navbar from "./components/Navbar"
 import Profile from "./routes/Profile";
@@ -12,6 +12,8 @@ import Search from './routes/Search';
 import Product from "./routes/Product";
 import CreateProduct from "./routes/CreateProduct";
 import NotFound from "./routes/NotFound";
+
+import { signout } from './state/authSlice';
 
 const PrivateRoute = () => {
     const { isAuthenticated } = useSelector(state => state.auth);
@@ -34,6 +36,16 @@ const App = (props) => {
             }
         }
     })
+
+    const auth = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const expired = new Date(Date.now()) >= new Date(auth.expires);
+    useEffect(() => {
+      const main = () => {
+        if (expired) dispatch(signout());
+      };
+      main();
+    }, [dispatch, expired]);
 
     return (
         <ThemeProvider theme={theme}>

@@ -29,7 +29,6 @@ const Signup = () => {
             }
 
             const res = await axios.post("/auth/signup", localState);
-            // setLocalState(defaultLocalState);
 
             if (res.status === 200) {
                 console.log(res.data)

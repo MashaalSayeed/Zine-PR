@@ -14,14 +14,13 @@ const Profile = () => {
     const onLogout = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('/auth/logout');
-            if (res.status === 200) {
-                dispatch(signout());
-                navigate('/');
-            }
+            await axios.post('/auth/logout');
         } catch (error) {
             console.error(error);
         }
+
+        dispatch(signout());
+        navigate('/');
     }
 
     return (

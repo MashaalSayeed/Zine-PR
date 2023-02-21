@@ -19,19 +19,22 @@ router.get('/:productid', async (req, res) => {
     }
 })
 
-router.post('/create', authorize, uploads.single('image'), async (req, res) => {
+router.post('/create', [authorize, uploads.single('image')], async (req, res) => {
     try {
         const { name, description, price } = req.body;
         const user = req.user;
 
+        console.log(req.body)
+
+        if (!req.file) return res.json({ message: "missing image!" })
         if (!name || !description || !price) return res.status(401).json({ message: 'Incomplete fields' })
 
         const dbresult = await pool.query(
             "INSERT INTO product (name, description, image, price, created_by) VALUES($1, $2, $3, $4, $5) RETURNING *",
-            [name, description, req.filename, price, user.id]
+            [name, description, req.file.filename, price, user.userid]
         )
 
-        console.log(dbresult)
+        console.log(dbresult.rows[0])
         return res.json({ product: dbresult.rows[0] });
     } catch (error) {
         throw error;

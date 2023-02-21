@@ -10,6 +10,8 @@ import Login from "./routes/Login";
 import Signup from "./routes/Signup";
 import Search from './routes/Search';
 import Product from "./routes/Product";
+import CreateProduct from "./routes/CreateProduct";
+import NotFound from "./routes/NotFound";
 
 const PrivateRoute = () => {
     const { isAuthenticated } = useSelector(state => state.auth);
@@ -50,7 +52,10 @@ const App = (props) => {
     
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<Profile />} />
+                        <Route path="/create" element={<CreateProduct />} />
                     </Route>
+
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

@@ -17,7 +17,7 @@ CREATE TABLE product (
     productid SERIAL PRIMARY KEY,
     name VARCHAR(128) NOT NULL,
     description VARCHAR(1024),
-    image CHAR(64),
+    image CHAR(36),
     price FLOAT,
     created_by INT,
     created_at DATE DEFAULT CURRENT_DATE,

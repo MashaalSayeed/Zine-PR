@@ -15,6 +15,7 @@ app.use(cors({ origin: true, credentials: true }));
 
 // ROUTES
 app.use('/auth', require('./routes/auth'));
+app.use('/products', require('./routes/products'))
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

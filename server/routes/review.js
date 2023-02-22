@@ -15,7 +15,7 @@ router.get('/:productid', async (req, res) => {
 
         return res.json({ reviews: dbresult.rows })
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 })
 
@@ -30,7 +30,7 @@ router.post('/create', authorize, async (req, res) => {
 
         return res.json({ review: dbresult.rows[0] })
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 });
 

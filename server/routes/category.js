@@ -11,7 +11,7 @@ router.get('/all', async (req, res) => {
         const categories = dbresult.rows.map((row) => {return {id: row.categoryid, name: row.category_name}})
         return res.json({ categories })
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 });
 

@@ -15,7 +15,7 @@ router.get('/id/:productid', async (req, res) => {
         if (!dbresult.rows.length) return res.status(401).json({ message: "Product not found" })
         return res.json({ product: dbresult.rows[0] });
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 })
 
@@ -24,23 +24,21 @@ router.post('/create', [authorize, uploads.single('image')], async (req, res) =>
         const { name, description, price, category } = req.body;
         const user = req.user;
 
-        console.log(req.body)
-
         if (!req.file) return res.json({ message: "missing image!" })
         if (!name || !description || !price || !category) return res.status(401).json({ message: 'Incomplete fields' })
 
         // Set category id
         const dbresult = await pool.query(
-            "INSERT INTO product (name, description, image, price, created_by, categoryid) \
-            SELECT $1, $2, $3, $4, $5, categoryid FROM category WHERE category_name=$6 \
-            RETURNING *",
+            "INSERT INTO product (name, description, image, price, created_by, categoryid) " +
+            "SELECT $1, $2, $3, $4, $5, $6 " +
+            "RETURNING *",
             [name, description, req.file.filename, price, user.userid, category]
         )
 
         console.log(dbresult.rows[0])
         return res.json({ product: dbresult.rows[0] });
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 })
 
@@ -62,7 +60,6 @@ router.get('/search', async (req, res) => {
                 [product]
             );
         } else {
-            console.log(product, category);
             dbresult = await pool.query(
                 "SELECT product.productid, name, price, image, COUNT(review.reviewid), AVG(review.rating) FROM product " +
                 "LEFT JOIN review USING (productid)" +
@@ -75,7 +72,7 @@ router.get('/search', async (req, res) => {
     
         return res.json({ results: dbresult.rows });
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 })
 

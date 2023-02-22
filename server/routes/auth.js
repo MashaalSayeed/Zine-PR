@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
     
         return res.json({ expires: expiryTime, user: authUser });
     } catch (error) {
-        throw error
+        console.error(error);
     }
 })
 
@@ -67,7 +67,7 @@ router.post('/signup', async (req, res) => {
 
         res.json({ message: "Sign up successful!" });
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 })
 
@@ -76,7 +76,7 @@ router.post('/logout', [authorize], async (req, res) => {
         res.clearCookie('t')
         return res.json({ message: "Logged Out" })
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 })
 

@@ -4,9 +4,7 @@ import shopimg from "../assets/images/productshop.jpg"
 import { useNavigate } from "react-router-dom";
 
 
-const Home = (props) => {
-    const categories = props.categories
-
+const Home = ({ categories }) => {
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
 
@@ -80,12 +78,12 @@ const Home = (props) => {
                 >
                     {categories.map((cat, index) => (
                         <Grid item key={index} xs={3}>
-                            <Button variant="contained" onClick={onCategoryClick} id={cat} sx={{ 
+                            <Button variant="contained" onClick={onCategoryClick} id={cat.id} sx={{ 
                                 background: "white",
                                 color: "black",
                                 height: "70px",
                                 width: "100%"
-                            }}>{cat}</Button>
+                            }}>{cat.name}</Button>
                         </ Grid>
                     ))}
                 </Grid>

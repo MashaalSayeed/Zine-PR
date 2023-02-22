@@ -1,42 +1,38 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemText, Paper, Stack, TextField, Typography} from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import axios from "axios";
 
 const Search = (props) => {
-    const categories =["All"].concat(props.categories);
+    const categories =[{id: -1, name: "All"}].concat(props.categories);
     const [searchParams, ] = useSearchParams();
-
     const [localState, setLocalState] = useState({
         search: searchParams.get('product') || "",
-        category: searchParams.get('category') || "All",
-        results: []
-    });
+        category: parseInt(searchParams.get('category')) || -1
+    })
+    const [results, setResults] = useState([]);
 
-    // const navigate = useNavigate();
-    const search = async (category, name) => {
-        category = category || localState.category;
-        name = name || localState.search
-        try {
-            const res = await axios.get(`/products/search?product=${name}&category=${category}`);
-            console.log(res.data.results)
-            setLocalState({ category, results: res.data.results, search: name });
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    useEffect(() => {
+        const search = async () => {
+            try {
+                const res = await axios.get(`/products/search?product=${localState.search}&category=${localState.category}`);
+                setResults(res.data.results)
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-    const onChange = async (e) => {
+        search();
+    }, [localState])
+
+    const onChange = (e) => {
         e.preventDefault();
         setLocalState({ ...localState, [e.target.id]: e.target.value})
-        if (e.target.value.length > 2) await search(null, e.target.value);
     }
 
-    const setCategory = async (category) => {
-        const oldCat = localState.category;
+    const setCategory = (category) => {
         setLocalState({ ...localState, category })
-        if (category !== oldCat) await search(category, null);
     }
 
     return (
@@ -62,8 +58,8 @@ const Search = (props) => {
                             {
                             categories.map((cat, index) => (
                                 <ListItem key={index} disablePadding>
-                                    <ListItemButton disableGutters selected={localState.category === cat} sx={{pl: 1}} onClick={() => setCategory(cat)}>
-                                        <ListItemText primary={cat} primaryTypographyProps={{typography: {sm: "body1", xs: "body2"}}}></ListItemText>
+                                    <ListItemButton disableGutters selected={localState.category === cat.id} sx={{pl: 1}} onClick={() => setCategory(cat.id)}>
+                                        <ListItemText primary={cat.name} primaryTypographyProps={{typography: {sm: "body1", xs: "body2"}}} />
                                     </ListItemButton>
                                 </ListItem>
                             ))
@@ -75,11 +71,9 @@ const Search = (props) => {
                 <Grid item xs={9} sm={9}>
                     <Stack marginLeft={2} spacing={1}>
                         {
-                            localState.results.map((product, index) => (
+                            results.map((product, index) => (
                                 <ProductCard key={index} product={product} />
                             ))
-                            //<ProductCard product={{ name: "iPhone 14 Pro" }}></ProductCard>
-                            //<ProductCard product={{ name: "Samsung Galaxy S23 Ultra" }}></ProductCard>
                         }
                     </Stack>
                 </Grid>

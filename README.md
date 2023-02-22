@@ -14,10 +14,12 @@ To setup the server
 
 1. Go to `server` directory
 2. Install all dependencies using `npm i`
-3. Start the server using `npm start`
+3. Store database credentials in a `.env`, see `.env.example`
+4. Create a folder `uploads` inside the server directory
+5. Start the server using `npm start`
 
 To setup the client server
 
 1. Go to `client` directory
 2. Install all dependencies using `npm i`
-2. Start client using `npm start`
+3. Start client using `npm start`

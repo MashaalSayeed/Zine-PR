@@ -61,6 +61,7 @@ const App = (props) => {
         fetchData();
     }, [])
 
+    if (!categories.length) return
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
@@ -69,7 +70,7 @@ const App = (props) => {
 
                     <Route exact path="" element={<Home categories={categories} />} />
                     <Route path="/search/*" element={<Search categories={categories} />} />
-                    <Route path="/product" element={<Product />} />
+                    <Route path="/product/:productid" element={<Product categories={categories} />} />
 
                     <Route element={<GuestRoute />}>
                         <Route path="/login" element={<Login />} />

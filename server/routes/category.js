@@ -5,10 +5,10 @@ const router = express.Router();
 router.get('/all', async (req, res) => {
     try {
         const dbresult = await pool.query(
-            "SELECT category_name FROM category;",
+            "SELECT * FROM category;",
         );
 
-        const categories = dbresult.rows.map((row) => row.category_name)
+        const categories = dbresult.rows.map((row) => {return {id: row.categoryid, name: row.category_name}})
         return res.json({ categories })
     } catch (error) {
         throw error;

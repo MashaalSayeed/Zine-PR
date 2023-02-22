@@ -17,6 +17,9 @@ app.use(cors({ origin: true, credentials: true }));
 app.use('/auth', require('./routes/auth'));
 app.use('/products', require('./routes/products'))
 app.use('/category', require('./routes/category'))
+app.use('/review', require('./routes/review'))
+
+app.use('/images', express.static('./uploads'))
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

@@ -4,7 +4,7 @@ const pool = require('../db/db');
 const authorize = require('../middlewares/auth')
 const uploads = require('../middlewares/uploads')
 
-router.get('/product/:productid', async (req, res) => {
+router.get('/id/:productid', async (req, res) => {
     try {
         const { productid } = req.params;
         const dbresult = await pool.query(
@@ -13,7 +13,7 @@ router.get('/product/:productid', async (req, res) => {
         )
 
         if (!dbresult.rows.length) return res.status(401).json({ message: "Product not found" })
-        return res.json({ item: dbresult.rows[0] });
+        return res.json({ product: dbresult.rows[0] });
     } catch (error) {
         throw error;
     }
@@ -45,25 +45,30 @@ router.post('/create', [authorize, uploads.single('image')], async (req, res) =>
 })
 
 /**
- * Returns 10 search results based on category and name (if given)
+ * Returns 10 search results based on categoryid and name (if given)
  */
 router.get('/search', async (req, res) => {
     try {
         let { product, category } = req.query;
         product = `%${product}%`;
         let dbresult;
-        if (category === "All") {
+        if (category === "-1") {
             dbresult = await pool.query(
-                "SELECT * FROM product WHERE name ILIKE $1",
+                "SELECT product.productid, name, price, image, COUNT(review.reviewid), AVG(review.rating) FROM product " +
+                "LEFT JOIN review USING (productid) " +
+                "WHERE name ILIKE $1 " +
+                "GROUP BY product.productid " +
+                "LIMIT 10;",
                 [product]
             );
         } else {
             console.log(product, category);
             dbresult = await pool.query(
-                "SELECT * FROM product \
-                INNER JOIN category ON category.categoryid=product.categoryid \
-                WHERE name ILIKE $1 AND category_name=$2 \
-                LIMIT 10",
+                "SELECT product.productid, name, price, image, COUNT(review.reviewid), AVG(review.rating) FROM product " +
+                "LEFT JOIN review USING (productid)" +
+                "WHERE name ILIKE $1 AND categoryid=$2 " +
+                "GROUP BY product.productid " +
+                "LIMIT 10;",
                 [product, category]
             );
         }

@@ -36,7 +36,8 @@ CREATE TABLE review (
     reviewid SERIAL PRIMARY KEY,
     productid INT,
     userid INT,
-    rating INT,
+    rating FLOAT,
+    title VARCHAR(128),
     review VARCHAR(1024),
     created_at DATE DEFAULT CURRENT_DATE,
 

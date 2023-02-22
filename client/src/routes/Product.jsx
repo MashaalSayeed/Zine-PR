@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Button, Container, Divider, Paper, Rating, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Button, Container, Divider, Paper, Rating, TextField, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Stack } from "@mui/system";
 import axios from "axios";
@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 const Product = ({ categories }) => {
     const { productid } = useParams();
     const { user, isAuthenticated } = useSelector((state) => state.auth);
-    const isMobile = useMediaQuery(theme => theme.breakpoints.only("xs"));
+    // const isMobile = useMediaQuery(theme => theme.breakpoints.only("xs"));
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);

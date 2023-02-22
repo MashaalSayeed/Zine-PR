@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, TextField, Typography, Button, Container } from "@mui/material";
+import { Box, TextField, Typography, Button, Container, Paper } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signin } from "../state/authSlice";
@@ -40,10 +40,10 @@ const Login = () => {
     }
 
     return (
-        <Container component="main" maxWidth="sm">
+        <Container component="main" maxWidth="sm" sx={{ height: "100%"}}>
+            <Paper sx={{ margin: "auto", paddingTop: 2, paddingBottom: 2, marginTop: 8 }}>
             <Box
                 sx={{
-                    marginTop: 8,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center'
@@ -84,6 +84,7 @@ const Login = () => {
                     <Button type="submit" fullWidth variant="contained" onClick={onSubmit} style={{ margin: '8px 0' }}>Login</Button>
                 </Box>
             </Box>
+            </Paper>
         </Container>
     )
 }

@@ -10,7 +10,7 @@ const CreateProduct = (props) => {
     const [localState, setLocalState] = useState({
         name: "",
         description: "",
-        category: categories[0],
+        category: categories[0].id,
         price: "",
         image: undefined,
     });
@@ -90,7 +90,7 @@ const CreateProduct = (props) => {
                     >
                         {
                             categories.map((cat) => (
-                                <option key={cat} value={cat}>{cat}</option>
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
                             ))
                         }
                     </TextField>

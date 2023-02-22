@@ -17,7 +17,7 @@ const ProductCard = ({ product }) => {
             <Box 
                 component="img" 
                 src={`http://localhost:5555/images/${product.image}`}
-                sx={{ minHeight: "128px", width: "128px" }} 
+                sx={{ height: "128px", width: "128px" }} 
             />
 
             <Box sx={{ margin: 1 }}>

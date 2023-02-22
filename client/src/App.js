@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React, { useEffect } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -14,6 +14,7 @@ import CreateProduct from "./routes/CreateProduct";
 import NotFound from "./routes/NotFound";
 
 import { signout } from './state/authSlice';
+import axios from "axios";
 
 const PrivateRoute = () => {
     const { isAuthenticated } = useSelector(state => state.auth);
@@ -41,11 +42,24 @@ const App = (props) => {
     const dispatch = useDispatch();
     const expired = new Date(Date.now()) >= new Date(auth.expires);
     useEffect(() => {
-      const main = () => {
-        if (expired) dispatch(signout());
-      };
-      main();
+        const main = () => {
+            if (expired) dispatch(signout());
+        };
+        main();
     }, [dispatch, expired]);
+
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get('/category/all')
+                setCategories(res.data.categories);
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchData();
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>
@@ -53,18 +67,18 @@ const App = (props) => {
                 <Navbar />
                 <Routes>
 
-                    <Route exact path="" element={<Home />} />
-                    <Route path="/search" element={<Search />} />
+                    <Route exact path="" element={<Home categories={categories} />} />
+                    <Route path="/search/*" element={<Search categories={categories} />} />
                     <Route path="/product" element={<Product />} />
 
                     <Route element={<GuestRoute />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                     </Route>
-    
+
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<Profile />} />
-                        <Route path="/create" element={<CreateProduct />} />
+                        <Route path="/create" element={<CreateProduct categories={categories} />} />
                     </Route>
 
                     <Route path="*" element={<NotFound />} />

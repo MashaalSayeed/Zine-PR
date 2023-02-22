@@ -1,16 +1,32 @@
-import React from "react"
+import React, { useState } from "react"
 import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import shopimg from "../assets/images/productshop.jpg"
+import { useNavigate } from "react-router-dom";
 
 
-const Home = () => {
-    const categories = ['Electronics', 'Food', 'Health', 'Books', 'Toys', 'Games'];
-    const search = (e) => {
+const Home = (props) => {
+    const categories = props.categories
+
+    const [search, setSearch] = useState("");
+    const navigate = useNavigate();
+
+    const onChange = (e) => {
         e.preventDefault();
+        setSearch(e.target.value)
+    }
+
+    const onSearch = (e) => {
+        e.preventDefault();
+        navigate(`/search/?product=${search}`)
+    }
+
+    const onCategoryClick = (e) => {
+        e.preventDefault();
+        navigate(`/search/?category=${e.target.id}`)
     }
 
     return (
-        <Container component="main" maxWidth="false" disableGutters="true" sx={{position: "relative"}}>
+        <Container component="main" maxWidth="false" disableGutters sx={{position: "relative"}}>
             <Box
                 component="img"
                 sx={{
@@ -42,10 +58,12 @@ const Home = () => {
                             variant="filled"
                             size="small"
                             fullWidth
+                            onChange={onChange}
+                            value={search}
                             sx={{ background: "white", marginRight: "2px" }}
                         />
 
-                        <Button type="submit" variant="contained" size="large" onClick={search}>Search</Button>
+                        <Button type="submit" variant="contained" size="large" onClick={onSearch}>Search</Button>
                     </Box>
                 </div>
             </div>
@@ -60,9 +78,9 @@ const Home = () => {
                     rowSpacing={2}
                     sx={{ mt: 2, mb: 2, flexGrow: 1 }}
                 >
-                    {categories.map((cat) => (
-                        <Grid item xs={3}>
-                            <Button className="white-bg" variant="contained" sx={{ 
+                    {categories.map((cat, index) => (
+                        <Grid item key={index} xs={3}>
+                            <Button variant="contained" onClick={onCategoryClick} id={cat} sx={{ 
                                 background: "white",
                                 color: "black",
                                 height: "70px",

@@ -1,9 +1,44 @@
-import React from "react"
-import { Box, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemText, Paper, Rating, Stack, TextField, Typography} from "@mui/material";
+import React, { useState } from "react"
+import { Box, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemText, Paper, Stack, TextField, Typography} from "@mui/material";
+import { useSearchParams } from "react-router-dom";
+import ProductCard from "../components/ProductCard";
+import axios from "axios";
 
+const Search = (props) => {
+    const categories =["All"].concat(props.categories);
+    const [searchParams, ] = useSearchParams();
 
-const Home = () => {
-    const categories = ['All', 'Electronics', 'Food', 'Health', 'Books', 'Toys', 'Games'];
+    const [localState, setLocalState] = useState({
+        search: searchParams.get('product') || "",
+        category: searchParams.get('category') || "All",
+        results: []
+    });
+
+    // const navigate = useNavigate();
+    const search = async (category, name) => {
+        category = category || localState.category;
+        name = name || localState.search
+        try {
+            const res = await axios.get(`/products/search?product=${name}&category=${category}`);
+            console.log(res.data.results)
+            setLocalState({ category, results: res.data.results, search: name });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const onChange = async (e) => {
+        e.preventDefault();
+        setLocalState({ ...localState, [e.target.id]: e.target.value})
+        if (e.target.value.length > 2) await search(null, e.target.value);
+    }
+
+    const setCategory = async (category) => {
+        const oldCat = localState.category;
+        setLocalState({ ...localState, category })
+        if (category !== oldCat) await search(category, null);
+    }
+
     return (
         <Container component="main" sx={{ mt: 4 }}>
             <Box justifyContent="space-between" sx={{display: "flex", flexDirection: "row", alignItems: "center" }}>
@@ -12,6 +47,8 @@ const Home = () => {
                     type="search"
                     label="Search"
                     id="search"
+                    value={localState.search}
+                    onChange={onChange}
                     sx={{ width: "73%"}}
                 />
             </Box>
@@ -23,9 +60,9 @@ const Home = () => {
                         <Divider />
                         <List>
                             {
-                            categories.map(cat => (
-                                <ListItem disablePadding>
-                                    <ListItemButton disableGutters sx={{pl: 1}}>
+                            categories.map((cat, index) => (
+                                <ListItem key={index} disablePadding>
+                                    <ListItemButton disableGutters selected={localState.category === cat} sx={{pl: 1}} onClick={() => setCategory(cat)}>
                                         <ListItemText primary={cat} primaryTypographyProps={{typography: {sm: "body1", xs: "body2"}}}></ListItemText>
                                     </ListItemButton>
                                 </ListItem>
@@ -37,35 +74,13 @@ const Home = () => {
 
                 <Grid item xs={9} sm={9}>
                     <Stack marginLeft={2} spacing={1}>
-                        <Paper sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
-                            <Box component="img" sx={{ minHeight: "128px", width: "128px"}} />
-
-                            <Box sx={{ margin: 1 }}>
-                                <Typography sx={{typography: { sm: "h5", xs: "h6" }}}>Apple iPhone 14 Pro</Typography>
-                                {
-                                    // <Typography variant="body2" mt={1}>iPhone 14 Pro. With Dynamic Island. Crash Detection. A 48MP camera for up to 4x the resolution. 5G connectivity. Four colours.</Typography>
-                                }
-                                <Box sx={{ display: "flex", alignItems: "center" }}>
-                                    <Rating value={4.5} precision={0.5} readOnly/>
-                                    <Typography variant="body2" ml={1}>4.5 from 16 reviews</Typography>
-                                </Box>
-                            </Box>
-                        </Paper>
-
-                        <Paper sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
-                            <Box component="img" sx={{ minHeight: "128px", width: "128px"}} />
-
-                            <Box sx={{ margin: 1 }}>
-                                <Typography sx={{typography: { sm: "h5", xs: "h6" }}}>Apple iPhone 14 Pro</Typography>
-                                {
-                                    // <Typography variant="body2" mt={1}>iPhone 14 Pro. With Dynamic Island. Crash Detection. A 48MP camera for up to 4x the resolution. 5G connectivity. Four colours.</Typography>
-                                }
-                                <Box sx={{ display: "flex", alignItems: "center" }}>
-                                    <Rating value={4.5} precision={0.5} readOnly/>
-                                    <Typography variant="body2" ml={1}>4.5 from 16 reviews</Typography>
-                                </Box>
-                            </Box>
-                        </Paper>
+                        {
+                            localState.results.map((product, index) => (
+                                <ProductCard key={index} product={product} />
+                            ))
+                            //<ProductCard product={{ name: "iPhone 14 Pro" }}></ProductCard>
+                            //<ProductCard product={{ name: "Samsung Galaxy S23 Ultra" }}></ProductCard>
+                        }
                     </Stack>
                 </Grid>
             </Grid>
@@ -73,4 +88,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Search;

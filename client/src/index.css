@@ -23,3 +23,7 @@
     flex-direction: column;
     align-items: center;
 }
+
+html, body {
+    height: 100%;
+}

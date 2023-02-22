@@ -1,13 +1,17 @@
 import { Box, Button, Container, InputAdornment, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 
-const CreateProduct = () => {
+const CreateProduct = (props) => {
+    const categories = props.categories;
+    const navigate = useNavigate();
     const [localState, setLocalState] = useState({
         name: "",
         description: "",
-        price: undefined,
+        category: categories[0],
+        price: "",
         image: undefined,
     });
 
@@ -24,15 +28,16 @@ const CreateProduct = () => {
     const submit = async (e) => {
         e.preventDefault();
         console.log(localState)
-        //const formData = new FormData()
-        //formData.append('image', localState.image)
         try {
             const res = await axios.post('/products/create', localState, {
                 headers: {'content-type': 'multipart/form-data'}
             });
-            console.log(res.data)
+            if (res.status === 200) navigate('/profile')
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            if (error.response && error.response.data) {
+                window.alert(error.response.data.message);
+            }
         }
     }
 
@@ -43,7 +48,6 @@ const CreateProduct = () => {
             <Box maxWidth="sm" margin="auto">
                 <Box
                     component="form"
-                    encType="multipart/form-data"
                     sx={{ display: "flex", flexDirection:"column", alignItems: "center" }}
                 >
                     <Box 
@@ -73,6 +77,23 @@ const CreateProduct = () => {
                         required
                         fullWidth
                     />
+                    <TextField 
+                        margin="normal"
+                        label="Category"
+                        id="category"
+                        select
+                        onChange={onChange}
+                        value={localState.category}
+                        SelectProps={{ native: true }}
+                        required
+                        fullWidth
+                    >
+                        {
+                            categories.map((cat) => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))
+                        }
+                    </TextField>
                     <TextField 
                         margin="normal"
                         label="Product Description"

@@ -19,27 +19,17 @@ CREATE TABLE product (
     description VARCHAR(1024),
     image CHAR(36),
     price FLOAT,
+    categoryid INT,
     created_by INT,
     created_at DATE DEFAULT CURRENT_DATE,
+
+    CONSTRAINT FK_product_category FOREIGN KEY(categoryid)
+        REFERENCES category(categoryid)
+        ON DELETE SET NULL
 
     CONSTRAINT FK_product_created_by FOREIGN KEY(created_by)
         REFERENCES users(userid)
         ON DELETE SET NULL
-);
-
-CREATE TABLE productcategory (
-    productid INT,
-    categoryid INT,
-
-    PRIMARY KEY (productid, categoryid),
-
-    CONSTRAINT FK_product_id FOREIGN KEY (productid)
-        REFERENCES product(productid)
-        ON DELETE CASCADE,
-    
-    CONSTRAINT FK_category_id FOREIGN KEY (categoryid)
-        REFERENCES category (categoryid)
-        ON DELETE CASCADE
 );
 
 CREATE TABLE review (
@@ -58,3 +48,10 @@ CREATE TABLE review (
         REFERENCES users(userid)
         ON DELETE CASCADE
 );
+
+-- Add categories here
+INSERT INTO category (category_name) VALUES 
+    ('Electronics'), ('Appliances'), ('Food'), ('Beverages'), ('Health'), 
+    ('Home'), ('Furniture'), ('Vehicles'), ('Pets'), ('Beauty'),
+    ('Books'), ('Toys'), ('Games'), ('Kitchen'), ('Tools'), ('Sports'),
+    ('Clothes'), ('Services');

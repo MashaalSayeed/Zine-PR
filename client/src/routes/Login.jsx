@@ -6,10 +6,7 @@ import { signin } from "../state/authSlice";
 import axios from 'axios'
 
 const Login = () => {
-    const defaultLocalState = {
-        email: "",
-        password: ""
-    }
+    const defaultLocalState = { email: "", password: "" };
     const [localState, setLocalState] = useState(defaultLocalState);
     const dispatch = useDispatch();
     const navigate = useNavigate();

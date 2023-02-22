@@ -32,7 +32,7 @@ const Signup = () => {
 
             if (res.status === 200) {
                 console.log(res.data)
-                navigate("/login");
+                navigate("/login", { state: res.data.message });
             }
         } catch (error) {
             console.error(error);

@@ -105,7 +105,7 @@ const Product = ({ categories }) => {
                         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
                             <Rating value={product.rating || 0} precision={0.5} readOnly />
                             <Typography variant="body2">
-                                { product.reviewCount ? `(${product.rating} from ${product.reviewCount} reviews)` : "" }
+                                { product.reviewCount ? `(${product.rating.toFixed(2)} from ${product.reviewCount} reviews)` : "" }
                             </Typography>
                         </Box>
 

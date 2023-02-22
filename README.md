@@ -9,6 +9,7 @@ To setup the database
 1. Install PostgreSQL and pgAdmin4
 2. Run `psql -u postgres` and enter your password to connect to local database server
 3. Go to `server/db` and run the file using `psql -u postgres -f db.sql`
+4. Run `data.sql` for sample data
 
 To setup the server
 

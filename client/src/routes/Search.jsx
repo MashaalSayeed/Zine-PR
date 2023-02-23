@@ -63,17 +63,20 @@ const Search = (props) => {
                                     </ListItemButton>
                                 </ListItem>
                             ))
-                            }
+}
                         </List>
                     </Paper>
                 </Grid>
 
                 <Grid item xs={9} sm={9}>
-                    <Stack marginLeft={2} spacing={1}>
+                    <Stack marginLeft={2} spacing={2}>
                         {
                             results.map((product, index) => (
                                 <ProductCard key={index} product={product} />
                             ))
+                        }
+                        {
+                            !results.length && <Typography variant="h6" margin="auto">No results found</Typography>
                         }
                     </Stack>
                 </Grid>

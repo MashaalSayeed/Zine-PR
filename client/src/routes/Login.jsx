@@ -1,15 +1,19 @@
 import React, { useState } from "react"
-import { Box, TextField, Typography, Button, Container, Paper } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Box, TextField, Typography, Button, Container, Paper, Alert } from "@mui/material";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signin } from "../state/authSlice";
 import axios from 'axios'
 
 const Login = () => {
-    const defaultLocalState = { email: "", password: "" };
-    const [localState, setLocalState] = useState(defaultLocalState);
+    const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const defaultLocalState = { email: "", password: "" };
+    const [localState, setLocalState] = useState(defaultLocalState);
+    const [message, setMessage] = useState(location.state || "");
+    const [error, setError] = useState("")
 
     const onChange = (e) => {
         e.preventDefault();
@@ -20,7 +24,7 @@ const Login = () => {
         e.preventDefault();
         try {
             if (localState.email === "" || localState.password === "") {
-                window.alert("Email ID and Password cannot be blank.");
+                setError("Email ID and Password cannot be blank.");
                 return;
             }
 
@@ -34,14 +38,20 @@ const Login = () => {
         } catch (error) {
             console.error(error);
             if (error.response && error.response.data) {
-                window.alert(error.response.data.message);
+                setError(error.response.data.message)
             }
         }
     }
 
     return (
-        <Container component="main" maxWidth="sm" sx={{ height: "100%"}}>
-            <Paper sx={{ margin: "auto", paddingTop: 2, paddingBottom: 2, marginTop: 8 }}>
+        <Container component="main" maxWidth="sm" sx={{ height: "100%", paddingTop: 1}}>
+            {
+                message && <Alert onClose={() => setMessage("")}>{message}</Alert>
+            }
+            {
+                error && <Alert onClose={() => setError("")} severity="error">{error}</Alert>
+            }
+            <Paper sx={{ paddingTop: 2, paddingBottom: 2, marginTop: 8 }}>
             <Box
                 sx={{
                     display: 'flex',

@@ -4,8 +4,7 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
 
-const CreateProduct = (props) => {
-    const categories = props.categories;
+const CreateProduct = ({ categories }) => {
     const navigate = useNavigate();
     const [localState, setLocalState] = useState({
         name: "",

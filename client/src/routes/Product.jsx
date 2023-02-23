@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Button, Container, Divider, Paper, Rating, TextField, Typography } from "@mui/material";
+import { Button, Collapse, Container, Divider, Paper, Rating, TextField, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Stack } from "@mui/system";
 import axios from "axios";
@@ -126,7 +126,7 @@ const Product = ({ categories }) => {
             <Stack spacing={2}>
                 {
                     reviews.map((review, index) => (
-                        <Paper key={index} sx={{ padding: 2 }}>
+                        <Paper key={index} sx={{ padding: 2 }} elevation={3}>
                             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                 <Typography variant="h6"><b>{review.username}</b></Typography>
                                 <Rating value={review.rating} precision={0.5} size="small" readOnly />
@@ -137,15 +137,14 @@ const Product = ({ categories }) => {
                             <Typography variant="body1">
                                 {review.review}
                             </Typography>
+                            
                         </Paper>
                     ))
                 }
             </Stack>
 
             <br />
-            <Divider />
-            <br />
-            <Paper sx={{ padding: 2 }}>
+            <Paper elevation={3} sx={{ padding: 2 }}>
                 <Typography variant="h4" textAlign="center"><u>Write A Review</u></Typography>
                 <Box component="form" mt={3}>
                     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between"}}>

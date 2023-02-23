@@ -27,14 +27,13 @@ const GuestRoute = () => {
 }
 
 const App = (props) => {
+    const { palette } = createTheme();
+    const { augmentColor } = palette;
+    const createColor = (mainColor) => augmentColor({ color: { main: mainColor } })
     const theme = createTheme({
-        pallete: {
-            primary: {
-                main: "#ffffff"
-            },
-            secondary: {
-                main: "#000000"
-            }
+        palette: {
+            white: createColor("#ffffff"),
+            black: createColor("#000000")
         }
     })
 
@@ -53,6 +52,7 @@ const App = (props) => {
         const fetchData = async () => {
             try {
                 const res = await axios.get('/category/all')
+                console.log(res.data.categories)
                 setCategories(res.data.categories);
             } catch (error) {
                 console.error(error)

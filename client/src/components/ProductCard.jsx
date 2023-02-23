@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
     }
 
     return (
-        <Paper sx={{ width: "100%", display: "flex", flexDirection: "row", overflow: "auto" }} onClick={click}>
+        <Paper elevation={3} sx={{ width: "100%", display: "flex", overflow: "hidden" }} onClick={click}>
             <Box 
                 component="img" 
                 src={`http://localhost:5555/images/${product.image}`}

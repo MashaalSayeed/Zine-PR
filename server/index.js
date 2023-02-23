@@ -3,7 +3,6 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require("dotenv").config();
 
-const pool = require('./db/db');
 const app = express();
 
 const PORT = process.env.PORT || 5555; 
@@ -20,6 +19,8 @@ app.use('/category', require('./routes/category'))
 app.use('/review', require('./routes/review'))
 
 app.use('/images', express.static('./uploads'))
+// const path = require('path');
+// app.use(express.static(path.join(__dirname, '../client/build')))
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

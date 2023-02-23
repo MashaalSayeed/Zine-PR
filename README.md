@@ -1,5 +1,6 @@
 # Zine Product Review
 
+A product review website that allows users to search reviews for products and also create their own reviews
 Made from PostgreSQl, Express, React and Node.js
 
 ## Setup
